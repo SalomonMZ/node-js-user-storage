@@ -4,7 +4,7 @@ export class RegisterUserDto {
   private constructor(
     public readonly name: string,
     public readonly email: string,
-    public readonly passwod: string
+    public readonly password: string
   ) {}
 
   static create(object: Record<string, any>): [string?, RegisterUserDto?] {
