@@ -7,7 +7,6 @@ export class AuthController {
   constructor(public readonly authService: AuthService) {}
 
   private handleError = (error: unknown, res: Response) => {
-    console.log(this);
     if (error instanceof CustomError)
       return res.status(error.statusCode).json({ error: error.message });
     console.log(`${error}`);
