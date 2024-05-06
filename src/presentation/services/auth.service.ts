@@ -8,7 +8,9 @@ import {
 } from "../../domain";
 
 export class AuthService {
-  constructor() {}
+  constructor(
+    //* DI de el email service
+  ) {}
 
   public async registerUser(registerUserDto: RegisterUserDto) {
     const isEmailInUse = await UserModel.findOne({
@@ -24,12 +26,17 @@ export class AuthService {
       await user.save();
 
       // TODO JWT <---- Mantener autenticacion de el usuario
+      const token = await JwtAdapter.generateToken({
+        id: user.id,
+      });
+      if (!token) throw CustomError.internalServer("Error generating token");
 
       // TODO Email de confirmacion
+      //? Como usar el serivico aqui?
 
       const { password, ...userEntity } = UserEntity.fromObject(user);
 
-      return { user: userEntity, token: "ABC" };
+      return { user: userEntity, token };
     } catch (error) {
       throw CustomError.internalServer(`${error}`);
     }
