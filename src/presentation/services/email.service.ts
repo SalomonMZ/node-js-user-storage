@@ -16,12 +16,19 @@ type Props = {
   mailerService: string;
   mailerEmail: string;
   senderEmailPassword: string;
+  preventEmail: boolean;
 };
 
 export class EmailService {
   private transporter: Transporter;
+  private readonly preventEmail: boolean;
 
-  constructor({ mailerEmail, mailerService, senderEmailPassword }: Props) {
+  constructor({
+    mailerEmail,
+    mailerService,
+    senderEmailPassword,
+    preventEmail,
+  }: Props) {
     this.transporter = nodemailer.createTransport({
       service: mailerService,
       auth: {
@@ -29,10 +36,13 @@ export class EmailService {
         pass: senderEmailPassword,
       },
     });
+    this.preventEmail = preventEmail;
   }
 
   async sendEmail(options: SendMailOptions): Promise<boolean> {
     const { to, subject, htmlBody, attachements = [] } = options;
+
+    if (!this.preventEmail) return true;
 
     try {
       await this.transporter.sendMail({

@@ -10,6 +10,7 @@ export class Authroutes {
       mailerEmail: envs.MAILER_EMAIL,
       mailerService: envs.MAILER_SERVICE,
       senderEmailPassword: envs.MAILER_SECRET_KEY,
+      preventEmail: envs.SENT_EMAIL
     });
     const authService = new AuthService(emailService);
     const controller = new AuthController(authService);
