@@ -4,6 +4,7 @@ const categorySchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Name is required"],
+    unique: true,
   },
   available: {
     type: Boolean,
@@ -16,4 +17,4 @@ const categorySchema = new mongoose.Schema({
   },
 });
 
-export const CaregoryModel = mongoose.model("Category", categorySchema);
+export const CategoryModel = mongoose.model("Category", categorySchema);
