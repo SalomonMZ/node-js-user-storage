@@ -1,10 +1,5 @@
 import { CategoryModel } from "../../data";
-import {
-  CreateCategoryDto,
-  CustomError,
-  PaginationDto,
-  UserEntity,
-} from "../../domain";
+import { CreateCategoryDto, CustomError, PaginationDto } from "../../domain";
 import { CategoryEntity } from "../../domain/entities/category.entity";
 
 export class CategoryService {
@@ -12,7 +7,7 @@ export class CategoryService {
 
   createCategoy = async (
     createCategoryDto: CreateCategoryDto,
-    user: UserEntity
+    user: string
   ) => {
     const categoryExist = await CategoryModel.findOne({
       name: createCategoryDto.name,
@@ -21,7 +16,7 @@ export class CategoryService {
     try {
       const category = new CategoryModel({
         ...createCategoryDto,
-        user: user.id,
+        user,
       });
       await category.save();
       return {
@@ -43,16 +38,21 @@ export class CategoryService {
           .limit(limit),
       ]);
 
+      //* Alternative blocking way
       // const total = await CategoryModel.countDocuments()
       // const categories = await CategoryModel.find()
       //   .skip((page - 1) * limit)
       //   .limit(limit);
+
       return {
         page,
         limit,
         total,
         next: `/api/categories?page=${page + 1}&limit=${limit}`,
-        prev: (page - 1 > 0) ? `/api/categories?page=${page - 1}&limit=${limit}` : null,
+        prev:
+          page - 1 > 0
+            ? `/api/categories?page=${page - 1}&limit=${limit}`
+            : null,
         categories: categories.map((category) =>
           CategoryEntity.fromObject(category)
         ),

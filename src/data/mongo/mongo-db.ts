@@ -9,10 +9,13 @@ export class MongoDatabase {
   static async connnect({ dbName, mongoUrl }: ConnectionOptions) {
     try {
       await mongoose.connect(mongoUrl, { dbName });
-      return true
+      return true;
     } catch (error) {
       console.log("Mongo connection error");
       throw error;
     }
+  }
+  static async disconnect() {
+    await mongoose.disconnect();
   }
 }
